@@ -121,3 +121,28 @@
         RelativeLayout - rl
         
         CardView - cv
+
+- **디자인 패턴**
+    - **MVC + MVVM**
+        - data
+            - entity : 각종 Data Class
+            - remote : API 연결 관련
+        - UI (adapter는 같은 이름의 폴더에 위치)
+            - 1차 폴더 : activity
+                - 2차 폴더 : fragment
+                - main
+                    - home
+                        
+                        HomeFragment.kt
+                        
+                    - search
+                        
+                        SearchFragment.kt
+                        
+                    
+                    MainActivity.kt
+                    
+        - utils
+            - viewmodel
+            - module : API 연결 모듈
+            - interface : 각종 interface
