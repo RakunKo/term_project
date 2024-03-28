@@ -2,4 +2,31 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="dark_gray">#393939</color>  //공통 사용
+    <color name="ivory">#EFEFFB</color>  //공통 사용
+    <color name="deep_ivory">#DEDEF9</color>  //공통 사용
+    <color name="light_gray">#E5E5E5</color>
+    <color name="gray">#A3A3A3</color>
+    <color name="grapefruit">#EF8374</color>
+    <color name="transparent">#00ff0000</color>
+    <color name="sky_blue">#BAD2FF</color>
+    <color name="blue_gray">#AAA9EF</color>
+    <color name="dark_ivory">#F5F5F5</color>
+    <color name="neon_green">#D4EA60</color>
+    <color name="white_gray">#919191</color>
+    <color name="sky_blue_main">#B9ECFF</color>
+    <color name="red_orange">#F1C7A6</color>
+    <color name="lemon">#FBE7A2</color>
+    <color name="green">#83DEA2</color>
+    <color name="red_pink">#FEB9B9</color>
+    <color name="purple_pink">#E1BBFF</color>
+    <color name="pink">#FFB5DD</color>
+    <color name="white_ivory">#FDFDFD</color>
+    <color name="deep_white_gray">#B4B4B4</color>
+    <color name="transparent_gray">#99000000</color>
+    <color name="calendar_gray">#F5F5F5</color>
+    <color name="very_white_gray">#DCDCDC</color>
+    <color name="toast_gray">#99000000</color>
+    <color name="red">#FF0000</color>
+    <color name="navi_gray">#676D75</color>
 </resources>
