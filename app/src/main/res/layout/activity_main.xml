@@ -16,6 +16,14 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/main_btm_stroke"/>
 
+    <Button
+        android:id="@+id/create_diary"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
     <View
         android:id="@+id/main_btm_stroke"
         android:layout_width="match_parent"
