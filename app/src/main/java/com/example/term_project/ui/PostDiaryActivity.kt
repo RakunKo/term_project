@@ -3,6 +3,7 @@ package com.example.term_project.ui
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.example.term_project.R
@@ -19,13 +20,10 @@ import java.util.Date
 
 class PostDiaryActivity : AppCompatActivity() {
     private lateinit var binding: ActivityPostDiaryBinding
-    private lateinit var mainViewModel: MainViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPostDiaryBinding.inflate(layoutInflater)
-        mainViewModel = ViewModelProvider(this).get(MainViewModel::class.java)
         setContentView(binding.root)
-
         clickListener()
     }
 
@@ -35,7 +33,10 @@ class PostDiaryActivity : AppCompatActivity() {
             val currentDate = LocalDate.now()
             val formattedDate = currentDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
 
-            inputDiary(Diary(content, mainViewModel.uid, formattedDate ))
+            val spf = getSharedPreferences("userInfo", MODE_PRIVATE)
+
+
+            inputDiary(Diary(content, spf.getString("uid", "")!!, formattedDate ))
         }
 
         binding.signupBackBtn.setOnClickListener {
