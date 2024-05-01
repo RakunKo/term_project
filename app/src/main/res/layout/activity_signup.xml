@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
+    tools:context=".ui.MainActivity"
     android:background="@color/white"
     android:orientation="vertical">
 
@@ -124,7 +124,6 @@
                 android:id="@+id/signup_name_et"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:inputType="textPassword"
                 android:hint="이름"
                 android:textSize="15dp"
                 android:fontFamily="@font/poorstory_regular"/>
@@ -147,18 +146,29 @@
                 android:id="@+id/signup_info_et"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
-                android:inputType="textPassword"
                 android:hint="소개"
                 android:textSize="15dp"
                 android:fontFamily="@font/poorstory_regular"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
+        <TextView
+            android:id="@+id/signup_error_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/red"
+            android:layout_gravity="end"
+            android:layout_marginEnd="30dp"
+            android:layout_marginTop="20dp"
+            android:text=""
+            android:fontFamily="@font/poorstory_regular"
+            android:visibility="invisible"/>
+
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/login_signup_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="100dp"
+            android:layout_marginTop="50dp"
             android:background="@drawable/login_btn_color"
             android:text="회원가입"
             android:textColor="@color/white"

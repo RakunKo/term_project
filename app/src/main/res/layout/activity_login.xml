@@ -4,7 +4,7 @@ xmlns:app="http://schemas.android.com/apk/res-auto"
 xmlns:tools="http://schemas.android.com/tools"
 android:layout_width="match_parent"
 android:layout_height="match_parent"
-tools:context=".MainActivity"
+tools:context=".ui.MainActivity"
 android:background="@color/white"
 android:orientation="vertical">
 
@@ -107,6 +107,17 @@ android:orientation="vertical">
             android:textStyle="bold"/>
 
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/login_error"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/red"
+        android:text=""
+        android:fontFamily="@font/poorstory_regular"
+        android:layout_gravity="end"
+        android:layout_marginTop="10dp"
+        android:visibility="invisible"/>
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/login_login_btn"
