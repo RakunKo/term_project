@@ -1,11 +1,13 @@
 package com.example.term_project.data.model
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 class MainViewModel : ViewModel() {
-    var uid = ""
+    var _uid = MutableLiveData<String>("")
 
     fun setUser(uid : String) {
-        this.uid = uid
+        _uid.value = uid
     }
 }
