@@ -76,7 +76,7 @@
     </LinearLayout>
    <androidx.cardview.widget.CardView
        android:id="@+id/myprofile_profile_edit_cv"
-       android:layout_marginTop="10dp"
+       android:layout_marginTop="30dp"
        android:layout_width="350dp"
        android:layout_height="30dp"
        app:cardCornerRadius="10dp"
