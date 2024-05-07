@@ -18,11 +18,12 @@
             android:id="@+id/signup_back_btn"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:src="@drawable/check_ic"
+            android:src="@drawable/arrow_back_ios"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
 
         <TextView
+            android:id="@+id/ppost_diary_date_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/poorstory_regular"
@@ -31,8 +32,13 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
+<<<<<<< HEAD
             android:textStyle="italic"/>
 
+=======
+            android:textSize="18sp"/>
+        
+>>>>>>> 99784ae52d3e078b687fbce11408a09d39939750
         <ImageView
             android:id="@+id/post_diary_btn"
             android:layout_width="20dp"
@@ -49,7 +55,9 @@
         android:background="@color/transparent"
         android:layout_marginTop="30dp"
         android:layout_marginHorizontal="30dp"
+        android:layout_marginBottom="30dp"
         android:maxLines="20"
         android:maxWidth="350dp"
+        android:fontFamily="@font/poorstory_regular"
         android:gravity="top"/>
 </LinearLayout>

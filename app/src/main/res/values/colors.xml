@@ -28,6 +28,7 @@
     <color name="very_white_gray">#DCDCDC</color>
     <color name="toast_gray">#99000000</color>
     <color name="red">#FF0000</color>
+    <color name="navi_gray_unselected">#7F7F7F</color>
     <color name="navi_gray">#676D75</color>
     <color name="clear_ivory">#D7D5C5</color>
 </resources>

@@ -3,19 +3,24 @@ package com.example.term_project.ui
 import android.opengl.Visibility
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.util.Patterns
 import android.view.View
 import android.widget.Toast
+import com.example.term_project.data.entity.Note
 import com.example.term_project.data.entity.SignupInfo
 import com.example.term_project.data.entity.UserInfo
 import com.example.term_project.databinding.ActivitySignupBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.util.regex.Pattern
 
 class SignupActivity : AppCompatActivity() {
     lateinit var binding : ActivitySignupBinding
     private lateinit var auth: FirebaseAuth
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySignupBinding.inflate(layoutInflater)
@@ -66,12 +71,12 @@ class SignupActivity : AppCompatActivity() {
         }
     }
     private fun createUser(user:SignupInfo) {
+
         auth.createUserWithEmailAndPassword(user.email, user.pwd)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     inputUserInfo(task.result.user?.let { UserInfo(user.email,user.name,user.info, it.uid, null ) })
                     Toast.makeText(this, "회원가입 성공", Toast.LENGTH_SHORT).show()
-                    finish()
                 } else {
                     Toast.makeText(this, "회원가입 실패", Toast.LENGTH_SHORT).show()
                 }
@@ -82,15 +87,39 @@ class SignupActivity : AppCompatActivity() {
     }
 
     private fun inputUserInfo(user: UserInfo?) {
+        val date = LocalDate.now()
+        val formattedDate = date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+
         user?.let {
             FirebaseFirestore.getInstance()
                 .collection("clients")
                 .document(user.uid)
                 .set(it)
                 .addOnSuccessListener {
+                    Log.d("정보", "성공")
                     Toast.makeText(this, "정보 삽입 완료", Toast.LENGTH_LONG).show()
+                    inputDaflautNote(Note(1, "일기", formattedDate, user.uid),user)
                 }
                 .addOnFailureListener {
+                    Log.d("정보", "실패")
+                    Toast.makeText(this, "정보 삽입 실패", Toast.LENGTH_LONG).show()
+                }
+        }
+    }
+
+    private fun inputDaflautNote(note: Note?, user:UserInfo?) {
+        note?.let {
+            FirebaseFirestore.getInstance()
+                .collection("note")
+                .document(user!!.uid + note.id)
+                .set(it)
+                .addOnSuccessListener {
+                    Log.d("정보", "성공")
+                    Toast.makeText(this, "정보 삽입 완료", Toast.LENGTH_LONG).show()
+                    finish()
+                }
+                .addOnFailureListener {
+                    Log.d("정보", "실패")
                     Toast.makeText(this, "정보 삽입 실패", Toast.LENGTH_LONG).show()
                 }
         }
