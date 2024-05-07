@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "535069987753",
-    "project_id": "dailydiary-2ed3a",
-    "storage_bucket": "dailydiary-2ed3a.appspot.com"
+    "project_number": "709275971404",
+    "project_id": "mind-compass-9825a",
+    "storage_bucket": "mind-compass-9825a.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:535069987753:android:900d90466cff2f976caab8",
+        "mobilesdk_app_id": "1:709275971404:android:107c5aed9eee2ed965a9e9",
         "android_client_info": {
           "package_name": "com.example.term_project"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyAot5mm2jpw0XrNW4WmdTMaTyyNDDXdRO4"
+          "current_key": "AIzaSyBO1dF9jqU959A9r8KFU5T7gZFHpvrmfN8"
         }
       ],
       "services": {
