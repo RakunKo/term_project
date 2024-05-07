@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">term_project</string>
+    <string name="user_name"><u>user_name</u></string>
+    <string name="user_email"><u>huncher00@naver.com</u></string>
+    <string name="user_info"><u>info</u></string>
+    <string name="version_info"><u>1.0.0</u></string>
+    <string name="date">날짜</string>
+    <string name="collection_date1">2023.11.1</string>
+    <string name="collection_date2">2023.11.2</string>
+    <string name="collection_date3">2023.11.29</string>
+    <string name="collection_diary1">퇴근 후 아주 신나게 내 단골 맛집에 갔다.\n그런데 사장님의 개인 사정으로 인해 문이 닫혀있었다.\n이럴수가...너무나도 좌절스런 하루다..ㅠ</string>
 </resources>
