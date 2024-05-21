@@ -29,6 +29,7 @@ class PostClickActivity : AppCompatActivity() {
     private var content = ""
     private var uid = ""
     private val customToast = CustomToast
+    private var ai = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDiaryBinding.inflate(layoutInflater)
@@ -37,9 +38,12 @@ class PostClickActivity : AppCompatActivity() {
         date = intent.getStringExtra("date")!!
         content = intent.getStringExtra("content")!!
         uid = intent.getStringExtra("uid")!!
+        ai = intent.getStringExtra("ai")!!
+
 
         binding.diaryTv.text = content
         binding.diaryDate.setText(date)
+        binding.diaryAi.text = ai
         clickListener()
     }
 

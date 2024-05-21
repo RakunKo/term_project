@@ -12,9 +12,14 @@ import com.example.term_project.data.entity.Diary
 import com.example.term_project.data.entity.UserInfo
 import com.example.term_project.databinding.ActivityMainBinding
 import com.example.term_project.databinding.ActivityPostDiaryBinding
+import com.google.ai.client.generativeai.GenerativeModel
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -46,8 +51,26 @@ class PostDiaryActivity : AppCompatActivity() {
 
             val spf = getSharedPreferences("userInfo", MODE_PRIVATE)
 
+            val scope = CoroutineScope(Dispatchers.IO)
+            scope.launch {
+                val generativeModel = GenerativeModel(
+                    // Use a model that's applicable for your use case (see "Implement basic use cases" below)
+                    modelName = "gemini-pro",
+                    // Access your API key as a Build Configuration variable (see "Set up your API key" above)
+                    apiKey = "AIzaSyCLD79cp3QPElkLOqijLNEuVrSANufPjjw"
+                )
+                val prompt = content + "오늘 일기에 대한 해결책을 3줄로 친구가 조언하듯이, 위로하듯이 말해줘"
+                val response = generativeModel.generateContent(prompt)
+                Log.d("response", response.text.toString())
 
-            inputDiary1(Diary(content, spf.getString("uid", "")!!, formattedDate, note ))
+                withContext(Dispatchers.Main) {
+                    // 여기에 UI 스레드에서 실행할 작업을 작성하세요
+                    inputDiary1(Diary(content, spf.getString("uid", "")!!, formattedDate, note, response.text ))
+                }
+            }
+
+
+
         }
 
         binding.signupBackBtn.setOnClickListener {
@@ -58,6 +81,7 @@ class PostDiaryActivity : AppCompatActivity() {
     private fun inputDiary1(diary: Diary?) {
         val db = FirebaseFirestore.getInstance()
         val documentRef = db.collection("diary").document(diary!!.uid + note + diary.created_at)
+
 
         documentRef.get().addOnSuccessListener { document ->
             if (document != null && document.exists()) {
