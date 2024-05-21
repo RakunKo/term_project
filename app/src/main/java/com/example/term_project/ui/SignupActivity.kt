@@ -13,8 +13,10 @@ import com.example.term_project.data.entity.UserInfo
 import com.example.term_project.databinding.ActivitySignupBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import java.sql.Timestamp
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import java.util.Date
 import java.util.regex.Pattern
 
 class SignupActivity : AppCompatActivity() {
@@ -61,9 +63,10 @@ class SignupActivity : AppCompatActivity() {
                             binding.signupErrorTv.text = "비밀번호를 확인해주세요"
                         }
                     }
+                }else {
+                    binding.signupErrorTv.visibility = View.VISIBLE
+                    binding.signupErrorTv.text = "이메일을 확인해주세요"
                 }
-                binding.signupErrorTv.visibility = View.VISIBLE
-                binding.signupErrorTv.text = "이메일을 확인해주세요"
             }
         }
     }
@@ -84,8 +87,7 @@ class SignupActivity : AppCompatActivity() {
     }
 
     private fun inputUserInfo(user: UserInfo?) {
-        val date = LocalDate.now()
-        val formattedDate = date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+        val date = Date()
 
         user?.let {
             FirebaseFirestore.getInstance()
@@ -95,7 +97,7 @@ class SignupActivity : AppCompatActivity() {
                 .addOnSuccessListener {
                     Log.d("정보", "성공")
                     Toast.makeText(this, "정보 삽입 완료", Toast.LENGTH_LONG).show()
-                    inputDaflautNote(Note(1, "일기", formattedDate, user.uid),user)
+                    inputDaflautNote(Note(1, "일기", date, user.uid),user)
                 }
                 .addOnFailureListener {
                     Log.d("정보", "실패")

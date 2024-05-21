@@ -5,14 +5,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.MainActivity"
+<<<<<<< HEAD
     android:background="@color/white">
+=======
+    android:background="@color/white"
+    android:paddingHorizontal="20dp">
+
+>>>>>>> b4ab83694ddbfc3dbbbcc25b44ebc52566e15274
     <!-- 맨 상단 -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/diary_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
-        android:paddingHorizontal="30dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
@@ -20,20 +25,20 @@
             android:id="@+id/diary_back_btn"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:src="@drawable/check_ic"
+            android:src="@drawable/arrow_back_ios"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
 
         <TextView
+            android:id="@+id/diary_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/poorstory_regular"
+            android:fontFamily="@font/npsfont_regula"
             android:text="날짜"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:textStyle="italic"/>
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
         <ImageView
             android:id="@+id/diary_delete_btn"
@@ -76,16 +81,18 @@
             android:maxLines="20"
             android:maxWidth="350dp"
             android:gravity="top"
+            android:textSize="15sp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            android:fontFamily="@font/npsfont_regula"
             />
 
         <TextView
             android:id="@+id/diary_emotion_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/poorstory_regular"
+            android:fontFamily="@font/npsfont_regula"
             android:text="감정"
             app:layout_constraintBottom_toBottomOf="@+id/diary_tv"
             app:layout_constraintEnd_toEndOf="parent"
@@ -109,7 +116,6 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="3"
-            android:paddingHorizontal="30dp"
             app:layout_constraintTop_toBottomOf="@+id/diary_tv"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -138,8 +144,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="chat GPT의 추천 답변"
-                    android:fontFamily="@font/poorstory_regular"
-                    android:textSize="20sp"
+                    android:fontFamily="@font/npsfont_regula"
+                    android:textSize="15sp"
                     app:layout_constraintTop_toTopOf="@id/diary_gpt_ic"
                     app:layout_constraintStart_toEndOf="@id/diary_gpt_ic"
                     android:layout_marginStart="10dp"
