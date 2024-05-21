@@ -59,6 +59,10 @@ class MainActivity : AppCompatActivity() {
                     replaceFragment(MyprofileFragment())
                     true
                 }
+                R.id.map -> {
+                    replaceFragment(CollectionFragment())
+                    true
+                }
                 // 필요에 따라 다른 항목 처리
                 else -> false
             }

@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -52,6 +53,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.TextFieldValue
@@ -138,7 +140,7 @@ class NoteActivity: AppCompatActivity()  {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
-                .height(170.dp)
+                .height(200.dp)
                 .fillMaxWidth()
                 .padding(horizontal = 30.dp)
         ) {
@@ -158,7 +160,7 @@ class NoteActivity: AppCompatActivity()  {
                 shape = RoundedCornerShape(10.dp),
                 colors = TextFieldDefaults.outlinedTextFieldColors(
                     focusedBorderColor = colorResource(id = R.color.dark_gray),
-                    unfocusedBorderColor = colorResource(id = R.color.main_grey)
+                    unfocusedBorderColor = colorResource(id = R.color.main_stroke)
                 )
             )
             Row(
@@ -223,13 +225,28 @@ class NoteActivity: AppCompatActivity()  {
                             shape = RoundedCornerShape(10.dp)
                         )
                         .clickable(onClick = {
-                            if(mode == 1) {
+                            if (mode == 1) {
                                 coroutineScope.launch {
                                     state.hide()
                                     onTextFieldValueChange(TextFieldValue(""))
                                 }
-                            }else {     //삭제하는 코드
-
+                            } else {     //삭제하는 코드
+                                FirebaseFirestore
+                                    .getInstance()
+                                    .collection("note")
+                                    .document(note.uid + note.id)
+                                    .delete()
+                                    .addOnSuccessListener {
+                                        Log.d("정보삭제", "성공")
+                                        mainViewModel.getAllNote(uid)
+                                        coroutineScope.launch {
+                                            state.hide()
+                                            onTextFieldValueChange(TextFieldValue(""))
+                                        }
+                                    }
+                                    .addOnFailureListener {
+                                        Log.d("정보", "실패")
+                                    }
                             }
                         }),
                     contentAlignment = Alignment.Center
@@ -296,8 +313,9 @@ class NoteActivity: AppCompatActivity()  {
             )
             Image(painter = painterResource(id = R.drawable.arrow_forward_ios),
                 contentDescription = null,
-                Modifier.size(15.dp)
-                    .clickable (onClick = {
+                Modifier
+                    .size(15.dp)
+                    .clickable(onClick = {
                         coroutineScope.launch {
                             onModeChange(2)
                             onClickNote(note)
@@ -305,10 +323,18 @@ class NoteActivity: AppCompatActivity()  {
                         }
                     }))
         }
-        Image(painter = painterResource(id = R.drawable.dotted_line),
-            contentDescription = null,
+
+        Canvas(
             modifier = Modifier
-                .padding(top = 10.dp, bottom = 20.dp)
-                .fillMaxWidth())
+                .fillMaxWidth()
+                .padding(bottom = 20.dp, top = 20.dp)
+        ) {
+            drawLine(
+                color = Color.Gray,
+                start = Offset(0f, 0f),
+                end = Offset(size.width, 0f),
+                strokeWidth = 3f
+            )
+        }
     }
 }
