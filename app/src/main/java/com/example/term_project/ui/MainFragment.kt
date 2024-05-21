@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -24,20 +25,30 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.material.DropdownMenu
+import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.PathEffect
+import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -49,6 +60,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.term_project.R
 import com.example.term_project.data.entity.Diary
+import com.example.term_project.data.entity.Note
 import com.kizitonwose.calendar.compose.CalendarState
 import com.kizitonwose.calendar.compose.HorizontalCalendar
 import com.kizitonwose.calendar.compose.rememberCalendarState
@@ -76,6 +88,7 @@ class MainFragment : Fragment() {
     ): View? {
         return ComposeView(requireContext()).apply {
             mainViewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
+
             setContent {
                 MainFragmentContent()
             }
@@ -89,9 +102,13 @@ class MainFragment : Fragment() {
         val endMonth = remember { currentMonth.value.plusMonths(100) } // Adjust as needed
         val daysOfWeek = remember { daysOfWeek() }
         val onDay = remember { mutableStateOf<LocalDate>(LocalDate.now()) }
-        val onCategory = remember { mutableStateOf<String>("일기") }
         val coroutineScope = rememberCoroutineScope()
+
         val documentsState = mainViewModel._documents.observeAsState()
+        val noteState = mainViewModel._note.observeAsState()
+        val noteListState = mainViewModel._noteList.observeAsState()
+
+
 
 
         val state = rememberCalendarState(
@@ -102,21 +119,24 @@ class MainFragment : Fragment() {
         )
 
         Surface (modifier = Modifier.fillMaxSize()){
-            Column (modifier = Modifier.padding(20.dp)){
-                MainTopBar(onCategory.value,
-                    openDrawer = {
-                        (requireActivity() as MainActivity).openDrawer()
-                    },
-                    goBack = {
-                        coroutineScope.launch {
-                            state.animateScrollToMonth(state.firstVisibleMonth.yearMonth.previousMonth)
-                        }
-                    },
-                    goForward = {
-                        coroutineScope.launch {
-                            state.animateScrollToMonth(state.firstVisibleMonth.yearMonth.nextMonth)
-                        }
-                    })
+            Column (modifier = Modifier.padding(30.dp)){
+                if (noteState.value != null && noteListState.value != null) {
+                    MainTopBar(noteState.value!!,
+                        noteListState.value!!,
+                        openMenu = {
+
+                        },
+                        goBack = {
+                            coroutineScope.launch {
+                                state.animateScrollToMonth(state.firstVisibleMonth.yearMonth.previousMonth)
+                            }
+                        },
+                        goForward = {
+                            coroutineScope.launch {
+                                state.animateScrollToMonth(state.firstVisibleMonth.yearMonth.nextMonth)
+                            }
+                        })
+                }
                 MainDateBar(state.firstVisibleMonth.yearMonth)
                 DaysOfWeekTitle(daysOfWeek = daysOfWeek)
                 HorizontalCalendar(
@@ -127,16 +147,20 @@ class MainFragment : Fragment() {
                             onDay.value = clickedDay.date // 클릭한 날짜를 상태에 업데이트
                         }) },
                 )
-                Image(painter = painterResource(id = R.drawable.dotted_line), contentDescription = null)
-                Spacer(modifier = Modifier.height(20.dp))
-                DiaryTextField(clickedDate = onDay.value,
-                    goWriteDairy = {
-                        val intent = Intent(requireContext(), PostDiaryActivity::class.java)
-                        intent.putExtra("date", onDay.value.toString())
-                        intent.putExtra("note", mainViewModel._note.value)
-                        startActivity(intent)
-                    },
-                    document = documentsState.value?: emptyList())
+
+                if (noteState.value != null) {
+                    DiaryTextField(
+                        note = noteState.value!!,
+                        clickedDate = onDay.value,
+                        goWriteDairy = {
+                            val intent = Intent(requireContext(), PostDiaryActivity::class.java)
+                            intent.putExtra("date", onDay.value.toString())
+                            intent.putExtra("note", mainViewModel._note.value!!.id)
+                            startActivity(intent)
+                        },
+                        document = documentsState.value ?: emptyList()
+                    )
+                }
             }
         }
 
@@ -161,9 +185,9 @@ class MainFragment : Fragment() {
             }
             Text(
                 text = day.date.dayOfMonth.toString(),
-                fontFamily = FontFamily(Font(R.font.poorstory_regular)),
+                fontFamily = FontFamily(Font(R.font.npsfont_regula)),
                 color = if (day.position == DayPosition.MonthDate) Color.Black else Color.Gray,
-                fontSize = 18.sp
+                fontSize = 15.sp
             )
 
         }
@@ -179,8 +203,8 @@ class MainFragment : Fragment() {
                     modifier = Modifier.weight(1f),
                     textAlign = TextAlign.Center,
                     text = dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.getDefault()),
-                    fontFamily = FontFamily(Font(R.font.poorstory_regular)),
-                    fontSize = 18.sp
+                    fontFamily = FontFamily(Font(R.font.npsfont_regula)),
+                    fontSize = 15.sp
                 )
             }
             Spacer(modifier = Modifier.height(20.dp))
@@ -188,28 +212,32 @@ class MainFragment : Fragment() {
     }
 
     @Composable
-    fun DiaryTextField(clickedDate : LocalDate?, goWriteDairy:()->Unit, document : List<Diary>) {
+    fun DiaryTextField(note : Note, clickedDate : LocalDate?, goWriteDairy:()->Unit, document : List<Diary>) {
         Column (modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight()
             .clickable {
                 goWriteDairy()
             }){
-            if (!document.isNullOrEmpty()) {
-                val filteredDiary = document.filter { it.created_at == clickedDate.toString() }
+            Image(painter = painterResource(id = R.drawable.dotted_line), contentDescription = null)
+            Spacer(modifier = Modifier.height(20.dp))
+            if (document.isNotEmpty()) {
+                val filteredDiary = document.filter { it.created_at == clickedDate.toString()&&
+                                                        it.note == note.id}
+                Log.d("filter", filteredDiary.toString())
                 if (filteredDiary.isNotEmpty()) {
                     Text(
                         text = filteredDiary[0].content, // 여기서 content는 Diary 객체의 내용을 나타내는 필드입니다.
                         maxLines = 20,
-                        fontFamily = FontFamily(Font(R.font.poorstory_regular)),
-                        fontSize = 18.sp
+                        fontFamily = FontFamily(Font(R.font.npsfont_regula)),
+                        fontSize = 15.sp
                     )
                 }else {
                     Text(
                         text = "일기를 작성해주세요", // 여기서 content는 Diary 객체의 내용을 나타내는 필드입니다.
                         maxLines = 20,
-                        fontFamily = FontFamily(Font(R.font.poorstory_regular)),
-                        fontSize = 18.sp
+                        fontFamily = FontFamily(Font(R.font.npsfont_regula)),
+                        fontSize = 15.sp
                     )
                 }
             }
@@ -217,20 +245,45 @@ class MainFragment : Fragment() {
     }
 
     @Composable
-    fun MainTopBar(diaryName : String, openDrawer:() -> Unit, goBack: () -> Unit , goForward:()->Unit) {
+    fun MainTopBar(note : Note?, noteList: List<Note>?, openMenu:() ->Unit, goBack: () -> Unit, goForward:()->Unit) {
+        var isMenuExpanded by remember { mutableStateOf(false) }
+
         Column {
             Row (modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 10.dp)
                 .size(20.dp),
                 verticalAlignment = Alignment.CenterVertically){
-                Image(painter = painterResource(id = R.drawable.list_ic),
+                Image(painter = painterResource(id = R.drawable.ic_diary_detail),
                     contentDescription =null,
-                    modifier = Modifier.clickable { openDrawer() })
+                    modifier = Modifier.clickable {
+                        isMenuExpanded = true
+                        openMenu() })
+                DropdownMenu(
+                    expanded = isMenuExpanded,
+                    onDismissRequest = { isMenuExpanded = false },
+                    modifier = Modifier.wrapContentSize()
+                ) {
+                    noteList?.forEach { noteItem ->
+                        val isSelected = noteItem.id == note!!.id
+                        DropdownMenuItem(
+                            onClick = {
+                                mainViewModel._note.value = noteItem
+                            },
+                            modifier = Modifier.background(if (isSelected) colorResource(id = R.color.light_gray) else Color.White),
+                        ) {
+                            Text(
+                                text = noteItem.title,
+                                fontFamily = FontFamily(Font(R.font.npsfont_regula)),
+                                fontSize = 15.sp
+                            )
+                        }
+                    }
+                }
                 Spacer(modifier = Modifier.width(10.dp))
-                Text(text = diaryName,
-                    fontFamily = FontFamily(Font(R.font.poorstory_regular)),
-                    fontSize = 18.sp
+                Text(text = note!!.title,
+                    fontFamily = FontFamily(Font(R.font.npsfont_regula)),
+                    fontSize = 15.sp
                 )
                 Row (modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.End){
@@ -243,7 +296,7 @@ class MainFragment : Fragment() {
                         modifier = Modifier.clickable { goForward() })
                 }
             }
-            Spacer(modifier = Modifier.height(15.dp))
+            Spacer(modifier = Modifier.height(10.dp))
         }
     }
     @Composable
@@ -254,8 +307,8 @@ class MainFragment : Fragment() {
                 contentDescription = null,
                 modifier = Modifier.weight(0.6f))
             Text(text = yearmonth.toString().replace('-', '.'),
-                fontFamily = FontFamily(Font(R.font.poorstory_regular)),
-                fontSize = 18.sp,
+                fontFamily = FontFamily(Font(R.font.npsfont_regula)),
+                fontSize = 15.sp,
             )
             Image(painter = painterResource(id = R.drawable.dotted_line),
                 contentDescription = null,
@@ -264,5 +317,4 @@ class MainFragment : Fragment() {
 
         Spacer(modifier = Modifier.height(10.dp))
     }
-
 }

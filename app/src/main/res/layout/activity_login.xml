@@ -22,7 +22,7 @@ android:orientation="vertical">
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="기분 나침반"
-        android:fontFamily="@font/poorstory_regular"
+        android:fontFamily="@font/npsfont_bold"
         android:textSize="30sp"
         android:layout_marginBottom="20dp"/>
 
@@ -30,7 +30,7 @@ android:orientation="vertical">
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Mood Compass"
-        android:fontFamily="@font/poorstory_regular"
+        android:fontFamily="@font/npsfont_regula"
         android:textSize="30sp"/>
 </LinearLayout>
 
@@ -55,8 +55,8 @@ android:orientation="vertical">
             android:layout_width="match_parent"
             android:layout_height="55dp"
             android:hint="이메일"
-            android:textSize="15dp"
-            android:fontFamily="@font/poorstory_regular"
+            android:textSize="12dp"
+            android:fontFamily="@font/npsfont_regula"
             android:layout_marginBottom="10dp"
             android:inputType="textEmailAddress"/>
 
@@ -80,9 +80,9 @@ android:orientation="vertical">
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:inputType="textPassword"
-            android:fontFamily="@font/poorstory_regular"
+            android:fontFamily="@font/npsfont_regula"
             android:hint="비밀번호"
-            android:textSize="15dp"/>
+            android:textSize="12dp"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <LinearLayout
@@ -96,8 +96,7 @@ android:orientation="vertical">
             android:layout_height="20dp"
             android:layout_gravity="end"
             android:text="비밀번호를 잊으셨나요?"
-            android:fontFamily="@font/poorstory_regular"
-            android:textStyle="bold"
+            android:fontFamily="@font/npsfont_regula"
             android:textColor="@color/gray"
             android:layout_marginEnd="5dp"/>
 
@@ -107,7 +106,7 @@ android:orientation="vertical">
             android:layout_height="20dp"
             android:layout_gravity="end"
             android:text="회원가입"
-            android:fontFamily="@font/poorstory_regular"
+            android:fontFamily="@font/npsfont_bold"
             android:textStyle="bold"/>
 
     </LinearLayout>
@@ -131,7 +130,7 @@ android:orientation="vertical">
         android:background="@drawable/login_btn_color"
         android:text="로그인"
         android:textColor="@color/white"
-        android:fontFamily="@font/poorstory_regular"
+        android:fontFamily="@font/npsfont_regula"
         android:textSize="15sp"/>
 </LinearLayout>
 </LinearLayout>

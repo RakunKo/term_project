@@ -1,20 +1,18 @@
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.term_project.data.entity.Diary
 import com.example.term_project.data.entity.Note
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 
 class MainViewModel : ViewModel() {
     private val db = FirebaseFirestore.getInstance()
     val _documents = MutableLiveData<List<Diary>>()
-    val _note = MutableLiveData<Int>()
+    val _note = MutableLiveData<Note>()
     val _noteList = MutableLiveData<List<Note>>()
-
-    init {
-        _note.value = 1
-    }
 
     fun getAllDiary(uid: String) {
         db.collection("diary")
@@ -45,6 +43,7 @@ class MainViewModel : ViewModel() {
                     noteList.add(note)
                 }
                 _noteList.value = noteList
+                _note.value = noteList[0]
                 Log.d("noteList", "${_noteList.value}")
             }
             .addOnFailureListener { exception ->
