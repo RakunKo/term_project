@@ -33,6 +33,7 @@ class PostDiaryActivity : AppCompatActivity() {
         note = intent.getIntExtra("note", 1)
 
         binding.ppostDiaryDateTv.text = date
+        binding.postDiaryEt.setText(intent.getStringExtra("content"))
         clickListener()
     }
 

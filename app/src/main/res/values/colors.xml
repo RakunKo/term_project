@@ -16,6 +16,7 @@
     <color name="white_gray">#919191</color>
     <color name="sky_blue_main">#B9ECFF</color>
     <color name="red_orange">#F1C7A6</color>
+    <color name="light_grey">#ECECEC</color>
     <color name="lemon">#FBE7A2</color>
     <color name="green">#83DEA2</color>
     <color name="red_pink">#FEB9B9</color>
@@ -31,4 +32,6 @@
     <color name="navi_gray_unselected">#7F7F7F</color>
     <color name="navi_gray">#676D75</color>
     <color name="clear_ivory">#D7D5C5</color>
+    <color name="main_grey">#F0F0F0</color>
+    <color name="main_stroke">#DADADA</color>
 </resources>
