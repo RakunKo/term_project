@@ -45,7 +45,6 @@ class MainActivity : AppCompatActivity() {
         super.onResume()
         val spf = getSharedPreferences("userInfo", MODE_PRIVATE)
         mainViewModel.getAllDiary(spf.getString("uid", "")!!)
-        mainViewModel.getAllNote(spf.getString("uid", "")!!)
     }
 
     private fun btmNavi() {

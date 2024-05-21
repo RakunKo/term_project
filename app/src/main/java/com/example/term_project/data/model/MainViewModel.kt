@@ -10,13 +10,8 @@ import com.google.firebase.firestore.Query
 
 class MainViewModel : ViewModel() {
     private val db = FirebaseFirestore.getInstance()
-<<<<<<< HEAD
-    val _documents = MutableLiveData<List<Diary>>() //일기 저장된 부분
-    val _note = MutableLiveData<Int>()
-=======
     val _documents = MutableLiveData<List<Diary>>()
     val _note = MutableLiveData<Note>()
->>>>>>> b4ab83694ddbfc3dbbbcc25b44ebc52566e15274
     val _noteList = MutableLiveData<List<Note>>()
 
     fun getAllDiary(uid: String) {

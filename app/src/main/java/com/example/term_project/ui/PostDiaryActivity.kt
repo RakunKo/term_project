@@ -56,7 +56,7 @@ class PostDiaryActivity : AppCompatActivity() {
 
     private fun inputDiary1(diary: Diary?) {
         val db = FirebaseFirestore.getInstance()
-        val documentRef = db.collection("diary").document(diary!!.uid + diary.created_at)
+        val documentRef = db.collection("diary").document(diary!!.uid + note + diary.created_at)
 
         documentRef.get().addOnSuccessListener { document ->
             if (document != null && document.exists()) {
