@@ -5,13 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.MainActivity"
-<<<<<<< HEAD
-    android:background="@color/white">
-=======
     android:background="@color/white"
     android:paddingHorizontal="20dp">
 
->>>>>>> b4ab83694ddbfc3dbbbcc25b44ebc52566e15274
     <!-- 맨 상단 -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/diary_bar"
