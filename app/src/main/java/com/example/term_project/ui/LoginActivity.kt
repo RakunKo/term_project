@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.util.Log
 import android.util.Patterns
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.example.term_project.R
@@ -17,6 +16,8 @@ class LoginActivity : AppCompatActivity() {
 
     lateinit var binding : ActivityLoginBinding
     private lateinit var auth: FirebaseAuth
+
+    private val customToast = CustomToast
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setTheme(R.style.Base_Theme_Term_project)
@@ -49,6 +50,7 @@ class LoginActivity : AppCompatActivity() {
                         val user = auth.currentUser
                         saveUid(user!!.uid)
                         Log.d("uid", user!!.uid)
+                        customToast.createToast(this, "로그인 되었습니다", 300,true)
                         startMainActivity()
                     } else {
                         binding.loginError.text = "이메일, 비밀번호를 확인해주세요"

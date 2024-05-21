@@ -22,6 +22,7 @@ import java.util.regex.Pattern
 class SignupActivity : AppCompatActivity() {
     lateinit var binding : ActivitySignupBinding
     private lateinit var auth: FirebaseAuth
+    private val customToast = CustomToast
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -76,13 +77,13 @@ class SignupActivity : AppCompatActivity() {
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     inputUserInfo(task.result.user?.let { UserInfo(user.email,user.name,user.info, it.uid, null ) })
-                    Toast.makeText(this, "회원가입 성공", Toast.LENGTH_SHORT).show()
+                    customToast.createToast(this, "회원가입 성공", 300, true)
                 } else {
-                    Toast.makeText(this, "회원가입 실패", Toast.LENGTH_SHORT).show()
+                    customToast.createToast(this, "회원가입 실패", 300, false)
                 }
             }
             .addOnFailureListener {
-                Toast.makeText(this, "회원가입 실패", Toast.LENGTH_SHORT).show()
+                customToast.createToast(this, "회원가입 실패", 300, false)
             }
     }
 
@@ -96,12 +97,10 @@ class SignupActivity : AppCompatActivity() {
                 .set(it)
                 .addOnSuccessListener {
                     Log.d("정보", "성공")
-                    Toast.makeText(this, "정보 삽입 완료", Toast.LENGTH_LONG).show()
                     inputDaflautNote(Note(1, "일기", date, user.uid),user)
                 }
                 .addOnFailureListener {
                     Log.d("정보", "실패")
-                    Toast.makeText(this, "정보 삽입 실패", Toast.LENGTH_LONG).show()
                 }
         }
     }
@@ -113,12 +112,10 @@ class SignupActivity : AppCompatActivity() {
                 .set(it)
                 .addOnSuccessListener {
                     Log.d("정보", "성공")
-                    Toast.makeText(this, "정보 삽입 완료", Toast.LENGTH_LONG).show()
                     finish()
                 }
                 .addOnFailureListener {
                     Log.d("정보", "실패")
-                    Toast.makeText(this, "정보 삽입 실패", Toast.LENGTH_LONG).show()
                 }
         }
     }

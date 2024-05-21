@@ -45,11 +45,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -94,6 +97,7 @@ class CollectionFragment : Fragment() {
     ): View? {
         return ComposeView(requireContext()).apply {
 
+            mainViewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
             date = LocalDate.now()
             setContent {
                 CollectionView()
@@ -103,16 +107,20 @@ class CollectionFragment : Fragment() {
     @Preview
     @Composable
     fun CollectionView() {
-        mainViewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
+        val documentsState = mainViewModel._documents.observeAsState()
+        val noteListState = mainViewModel._noteList.observeAsState()
         Surface (modifier = Modifier.fillMaxSize()){
             Column (modifier = Modifier
                 .fillMaxSize()
                 .padding(20.dp)){
                 TopBar()
                 Spacer(modifier = Modifier.height(20.dp))
-                LazyColumn (Modifier.fillMaxSize()){
-                    items(mainViewModel._documents.value!!) {diary->
-                        DiaryItem(diary = diary)
+                if (!documentsState.value.isNullOrEmpty() && !noteListState.value.isNullOrEmpty()) {
+                    Log.d("noteState", noteListState.value.toString())
+                    LazyColumn(Modifier.fillMaxSize()) {
+                        items(documentsState.value!!) { diary ->
+                            DiaryItem(diary = diary, noteListState.value!!)
+                        }
                     }
                 }
             }
@@ -137,9 +145,17 @@ class CollectionFragment : Fragment() {
     }
 
     @Composable
-    fun DiaryItem(diary: Diary) {
+    fun DiaryItem(diary: Diary, note : List<Note>) {
+        val stroke = Stroke(width = 5f, pathEffect = PathEffect.dashPathEffect(intervals = floatArrayOf(10f, 10f), phase = 10f))
         Column (
             Modifier
+                .drawBehind {
+                    drawRoundRect(
+                        color = Color.LightGray,
+                        style = stroke,
+                        cornerRadius = CornerRadius(10.dp.toPx())
+                    )
+                }
                 .fillMaxWidth()
                 .clickable {
                     val intent = Intent(requireContext(), PostClickActivity::class.java)
@@ -162,7 +178,7 @@ class CollectionFragment : Fragment() {
                 ) {
                     Column {
                         Text(
-                            text = mainViewModel._noteList.value!!.find { it.id == diary.note }!!.title,
+                            text = note.find { it.id == diary.note }!!.title,
                             fontSize = 18.sp,
                             fontWeight = FontWeight.W700,
                             fontFamily = FontFamily(Font(R.font.npsfont_regula))

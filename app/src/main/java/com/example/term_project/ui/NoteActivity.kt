@@ -1,6 +1,7 @@
 package com.example.term_project.ui
 
 import MainViewModel
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
@@ -26,6 +27,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
@@ -53,6 +55,8 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -63,7 +67,10 @@ import com.example.term_project.databinding.ActivityMainBinding
 import kotlinx.coroutines.launch
 import java.util.Date
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.PathEffect
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.text.font.FontWeight
 import com.google.firebase.firestore.FirebaseFirestore
 
 class NoteActivity: AppCompatActivity()  {
@@ -186,7 +193,7 @@ class NoteActivity: AppCompatActivity()  {
                         .clickable(onClick = {
                             val note = Note(
                                 uid = uid,
-                                id = mainViewModel._noteList.value!!.size + 1,
+                                id = mainViewModel._noteList.value!!.last().id + 1,
                                 created_at = Date(),
                                 title = textFieldValue.text
                             )
@@ -231,22 +238,41 @@ class NoteActivity: AppCompatActivity()  {
                                     onTextFieldValueChange(TextFieldValue(""))
                                 }
                             } else {     //삭제하는 코드
-                                FirebaseFirestore
-                                    .getInstance()
-                                    .collection("note")
-                                    .document(note.uid + note.id)
-                                    .delete()
-                                    .addOnSuccessListener {
-                                        Log.d("정보삭제", "성공")
-                                        mainViewModel.getAllNote(uid)
-                                        coroutineScope.launch {
-                                            state.hide()
-                                            onTextFieldValueChange(TextFieldValue(""))
+                                val db = FirebaseFirestore.getInstance()
+
+                                // Step 1: 쿼리를 사용하여 해당 노트 ID와 일치하는 일기들을 가져옴
+                                val diariesQuery = db.collection("diary")
+                                    .whereEqualTo("note", note.id)
+
+                                // 쿼리를 실행하고 비동기적으로 처리
+                                diariesQuery.get().addOnSuccessListener { querySnapshot ->
+                                    // Step 2: 각 문서를 삭제
+                                    db.runBatch { batch ->
+                                        for (document in querySnapshot.documents) {
+                                            batch.delete(document.reference)
                                         }
+                                    }.addOnSuccessListener {
+                                        Log.d("성공", "")
+                                        FirebaseFirestore
+                                            .getInstance()
+                                            .collection("note")
+                                            .document(note.uid + note.id)
+                                            .delete()
+                                            .addOnSuccessListener {
+                                                Log.d("정보삭제", "성공")
+                                                mainViewModel.getAllNote(uid)
+                                                coroutineScope.launch {
+                                                    state.hide()
+                                                    onTextFieldValueChange(TextFieldValue(""))
+                                                }
+                                            }
+                                            .addOnFailureListener {
+                                                Log.d("정보", "실패")
+                                            }
+                                    }.addOnFailureListener { e ->
                                     }
-                                    .addOnFailureListener {
-                                        Log.d("정보", "실패")
-                                    }
+                                }.addOnFailureListener { e ->
+                                }
                             }
                         }),
                     contentAlignment = Alignment.Center
@@ -305,36 +331,52 @@ class NoteActivity: AppCompatActivity()  {
     @Composable
     fun NoteItem(note:Note, state : ModalBottomSheetState, onModeChange: (Int) -> Unit, onClickNote:(Note) -> Unit) { // mode 추가
         val coroutineScope = rememberCoroutineScope()
-        Row(Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween){
-            Text(text = note.title,
-                fontFamily = FontFamily(Font(R.font.npsfont_regula)),
-                fontSize = 15.sp
-            )
-            Image(painter = painterResource(id = R.drawable.arrow_forward_ios),
-                contentDescription = null,
-                Modifier
-                    .size(15.dp)
-                    .clickable(onClick = {
-                        coroutineScope.launch {
-                            onModeChange(2)
-                            onClickNote(note)
-                            state.show()
-                        }
-                    }))
-        }
-
-        Canvas(
-            modifier = Modifier
+        val stroke = Stroke(width = 5f, pathEffect = PathEffect.dashPathEffect(intervals = floatArrayOf(10f, 10f), phase = 10f))
+        Column (
+            Modifier
+                .drawBehind {
+                    drawRoundRect(
+                        color = Color.LightGray,
+                        style = stroke,
+                        cornerRadius = CornerRadius(10.dp.toPx())
+                    )
+                }
                 .fillMaxWidth()
-                .padding(bottom = 20.dp, top = 20.dp)
-        ) {
-            drawLine(
-                color = Color.Gray,
-                start = Offset(0f, 0f),
-                end = Offset(size.width, 0f),
-                strokeWidth = 3f
-            )
+                .clickable(onClick = {
+                    coroutineScope.launch {
+                        onModeChange(2)
+                        onClickNote(note)
+                        state.show()
+                    }
+                }),
+            verticalArrangement = Arrangement.Center){
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(Color(0xFFF0F0F0), shape = RoundedCornerShape(10.dp))
+                    .padding(15.dp)
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Row (verticalAlignment = Alignment.CenterVertically) {
+                        Text(
+                            text = note.title,
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.W700,
+                            fontFamily = FontFamily(Font(R.font.npsfont_regula)),
+                            modifier = Modifier.weight(1f)
+                        )
+                        Image(painter = painterResource(id = R.drawable.arrow_forward_ios)
+                            , contentDescription =null,
+                            Modifier.size(15.dp))
+                    }
+                }
+            }
         }
+        Spacer(modifier = Modifier.height(20.dp))
+
     }
 }

@@ -20,52 +20,34 @@ import com.google.firebase.firestore.auth.User
 class MyprofileFragment : Fragment(){
 
     private lateinit var binding : FragmentMyprofileBinding
-    private val db = FirebaseFirestore.getInstance()
+    private lateinit var mainViewModel: MainViewModel
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentMyprofileBinding.inflate(layoutInflater)
-
-        val spf = requireActivity().getSharedPreferences("userInfo", AppCompatActivity.MODE_PRIVATE)
-        val uid = spf.getString("uid", "")
+        mainViewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
 
         binding.myprofileAnalysisCv.setOnClickListener{
             val intent = Intent(requireContext(), NoteActivity::class.java)
-            requireActivity().startActivity(intent)
-        }
-        binding.myprofileRecordCv.setOnClickListener{
-            val intent = Intent(requireContext(), AnalyzeActivity::class.java)
             requireActivity().startActivity(intent)
         }
         binding.myprofileQuestionLayoutLl.setOnClickListener {
             val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://forms.gle/9Xh76RBmzmS2BvRT9"))
             requireActivity().startActivity(intent)
         }
-
-        getUser(uid!!)
+        binding.myprofileProfileEditCv.setOnClickListener {
+            val intent = Intent(requireContext(), EditProfileActivity::class.java)
+            requireActivity().startActivity(intent)
+        }
+        if (mainViewModel._user.value != null) {
+            binding.myprofileInfoTv.text = mainViewModel._user.value!!.info
+            binding.myprofileNameTv.text = mainViewModel._user.value!!.name
+            binding.myprofileEmailTv.text = mainViewModel._user.value!!.email
+        }
 
         return binding.root
     }
 
-    private fun getUser(uid: String) {
-        db.collection("clients")
-            .whereEqualTo("uid", uid)
-            .get()
-            .addOnSuccessListener { documents ->
-                val diaryList = mutableListOf<UserInfo>()
-                for (document in documents) {
-                    val diary = document.toObject(UserInfo::class.java)
-                    diaryList.add(diary)
-                }
-                Log.d("MainViewModel", diaryList.toString())
-                binding.myprofileNameTv.text = diaryList[0].name
-                binding.myprofileEmailTv.text =  diaryList[0].email
-                binding.myprofileInfoTv.text = diaryList[0].info
-            }
-            .addOnFailureListener { exception ->
-                println("쿼리 실패: $exception")
-            }
-    }
 }
