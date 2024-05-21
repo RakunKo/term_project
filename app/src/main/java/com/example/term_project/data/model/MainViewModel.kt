@@ -8,7 +8,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 
 class MainViewModel : ViewModel() {
     private val db = FirebaseFirestore.getInstance()
-    val _documents = MutableLiveData<List<Diary>>()
+    val _documents = MutableLiveData<List<Diary>>() //일기 저장된 부분
     val _note = MutableLiveData<Int>()
     val _noteList = MutableLiveData<List<Note>>()
 
