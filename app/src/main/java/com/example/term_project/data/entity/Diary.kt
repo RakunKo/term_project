@@ -7,5 +7,6 @@ data class Diary(
     val content :String = "",
     val uid : String = "",
     val created_at : String = "",
-    val note : Int = 1
+    val note : Int = 1,
+    val ai : String? = ""
 )

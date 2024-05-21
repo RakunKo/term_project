@@ -162,6 +162,7 @@ class CollectionFragment : Fragment() {
                     intent.putExtra("date", diary.created_at)
                     intent.putExtra("content", diary.content.toString())
                     intent.putExtra("uid", diary.uid)
+                    intent.putExtra("ai", diary.ai)
                     requireActivity().startActivity(intent)
                 },
             verticalArrangement = Arrangement.Center){
