@@ -28,6 +28,7 @@ class PostClickActivity : AppCompatActivity() {
     private lateinit var date :String
     private var content = ""
     private var uid = ""
+    private val customToast = CustomToast
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDiaryBinding.inflate(layoutInflater)
@@ -51,9 +52,11 @@ class PostClickActivity : AppCompatActivity() {
                 .delete()
                 .addOnSuccessListener {
                     Log.d("정보삭제", "성공")
+                    customToast.createToast(this, "일기 삭제 완료", 300, true)
                     finish()
                 }
                 .addOnFailureListener {
+                    customToast.createToast(this, "일기 삭제 실패", 300, false)
                     Log.d("정보", "실패")
                 }
         }

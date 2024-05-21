@@ -15,20 +15,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/npsfont_bold"
-        android:text="@string/user_name"
+        android:text=""
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         android:textSize="20sp"
-        />
-    <ImageButton
-        android:id="@+id/myprofile_setting_btn"
-        android:background="@color/transparent"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:scaleType="fitXY"
-        android:src="@drawable/setting_ic"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/myprofile_name_tv"
         />
     <LinearLayout
         android:id="@+id/myprofile_user_info_ll"
@@ -61,7 +51,7 @@
                 android:id="@+id/myprofile_email_tv"
                 android:fontFamily="@font/npsfont_regula"
                 android:textSize="18sp"
-                android:text="@string/user_email"
+                android:text=""
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 />
@@ -72,7 +62,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:fontFamily="@font/npsfont_regula"
-                android:text="@string/user_info"
+                android:text=""
                 android:textSize="20sp"
                 app:layout_constraintTop_toBottomOf="@id/myprofile_email_tv" />
         </LinearLayout>
@@ -108,44 +98,10 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/myprofile_record_cv"
-            android:layout_width="wrap_content"
-            android:layout_height="70dp"
-            android:layout_marginEnd="10dp"
-            android:layout_weight="1"
-            app:cardBackgroundColor="@color/light_gray"
-            app:cardCornerRadius="10dp">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:orientation="vertical">
-
-
-                <ImageView
-                    android:id="@+id/myprofile_record_iv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_sound_wave"
-                    android:layout_gravity="center"
-                    android:layout_marginBottom="5dp"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/npsfont_regula"
-                    android:text="분석"
-                    android:textSize="12sp"/>
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="70dp"
-            android:layout_weight="1"
-            android:layout_marginStart="5dp"
             android:id="@+id/myprofile_analysis_cv"
             app:cardBackgroundColor="@color/light_gray"
             app:cardCornerRadius="10dp">

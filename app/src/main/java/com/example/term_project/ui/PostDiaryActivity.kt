@@ -24,6 +24,7 @@ class PostDiaryActivity : AppCompatActivity() {
     private lateinit var binding: ActivityPostDiaryBinding
     private lateinit var date :String
     private var note = 1
+    private val customToast = CustomToast
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPostDiaryBinding.inflate(layoutInflater)
@@ -67,11 +68,11 @@ class PostDiaryActivity : AppCompatActivity() {
 
                 documentRef.set(newData, SetOptions.merge())
                     .addOnSuccessListener {
-                        Toast.makeText(this, "정보 갱신 완료", Toast.LENGTH_LONG).show()
+                        customToast.createToast(this, "일기 작성 완료", 300, true)
                         finish()
                     }
                     .addOnFailureListener {
-                        Toast.makeText(this, "정보 갱신 실패", Toast.LENGTH_LONG).show()
+                        customToast.createToast(this, "일기 작성 실패", 300, false)
                     }
             } else {
                 // 존재하지 않는 경우, 새로운 문서를 생성합니다.
@@ -80,11 +81,11 @@ class PostDiaryActivity : AppCompatActivity() {
                     .document(diary.uid + diary.created_at)
                     .set(diary)
                     .addOnSuccessListener {
-                        Toast.makeText(this, "정보 삽입 완료", Toast.LENGTH_LONG).show()
+                        customToast.createToast(this, "일기 작성 완료", 300, true)
                         finish()
                     }
                     .addOnFailureListener {
-                        Toast.makeText(this, "정보 삽입 실패", Toast.LENGTH_LONG).show()
+                        customToast.createToast(this, "일기 작성 실패", 300, false)
                     }
             }
         }.addOnFailureListener { exception ->

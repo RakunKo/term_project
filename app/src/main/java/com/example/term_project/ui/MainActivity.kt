@@ -32,7 +32,8 @@ class MainActivity : AppCompatActivity() {
         val spf = getSharedPreferences("userInfo", MODE_PRIVATE)
 
         mainViewModel.getAllDiary(spf.getString("uid", "")!!)
-        mainViewModel.getAllNote(spf.getString("uid", "")!!)
+        mainViewModel.getInitAllNote(spf.getString("uid", "")!!)
+        mainViewModel.getUser(spf.getString("uid", "")!!)
 
         supportFragmentManager.beginTransaction()
             .replace(R.id.main_frm, MainFragment())
@@ -45,6 +46,8 @@ class MainActivity : AppCompatActivity() {
         super.onResume()
         val spf = getSharedPreferences("userInfo", MODE_PRIVATE)
         mainViewModel.getAllDiary(spf.getString("uid", "")!!)
+        mainViewModel.getUser(spf.getString("uid", "")!!)
+        mainViewModel.getAllNote(spf.getString("uid", "")!!)
     }
 
     private fun btmNavi() {

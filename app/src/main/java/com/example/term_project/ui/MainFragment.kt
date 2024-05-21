@@ -139,14 +139,19 @@ class MainFragment : Fragment() {
                 }
                 MainDateBar(state.firstVisibleMonth.yearMonth)
                 DaysOfWeekTitle(daysOfWeek = daysOfWeek)
-                HorizontalCalendar(
-                    state = state,
-                    dayContent = { Day(it,onDay.value,
-                        onClick = { clickedDay ->
-                            Log.d("MyComposeContent", "Clicked day: ${clickedDay.date}")
-                            onDay.value = clickedDay.date // 클릭한 날짜를 상태에 업데이트
-                        }) },
-                )
+                if (noteState.value != null) {
+                    HorizontalCalendar(
+                        state = state,
+                        dayContent = {
+                            Day(it, onDay.value,
+                                onClick = { clickedDay ->
+                                    Log.d("MyComposeContent", "Clicked day: ${clickedDay.date}")
+                                    onDay.value = clickedDay.date // 클릭한 날짜를 상태에 업데이트
+                                }, documentsState.value ?: emptyList(), noteState.value!!
+                            )
+                        },
+                    )
+                }
 
                 if (noteState.value != null) {
                     DiaryTextField(
@@ -166,7 +171,7 @@ class MainFragment : Fragment() {
 
     }
     @Composable
-    fun Day(day: CalendarDay, selectedDay: LocalDate?,onClick: (CalendarDay) -> Unit) {
+    fun Day(day: CalendarDay, selectedDay: LocalDate?,onClick: (CalendarDay) -> Unit,  document : List<Diary>, note : Note) {
 
         Box(
             modifier = Modifier
@@ -182,6 +187,16 @@ class MainFragment : Fragment() {
             if (day.date == selectedDay) {
                 // 동그라미를 그립니다.
                 Image(painter = painterResource(id = R.drawable.calender_circle), contentDescription = null)
+            }
+            Log.d("day", day.toString())
+            if(document.find { day.date.toString() == it.created_at && it.note == note.id } != null) {  //
+                Canvas(modifier = Modifier.matchParentSize()) {
+                    drawCircle(
+                        color = Color.Black,
+                        radius = 3.dp.toPx(),
+                        center = Offset(size.width - 10.dp.toPx(), 10.dp.toPx()) // Adjust position as needed
+                    )
+                }
             }
             Text(
                 text = day.date.dayOfMonth.toString(),
@@ -219,7 +234,18 @@ class MainFragment : Fragment() {
             .clickable {
                 goWriteDairy()
             }){
-            Image(painter = painterResource(id = R.drawable.dotted_line), contentDescription = null)
+            Canvas(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 20.dp, top = 20.dp)
+            ) {
+                drawLine(
+                    color = Color.Gray,
+                    start = Offset(0f, 0f),
+                    end = Offset(size.width, 0f),
+                    strokeWidth = 3f
+                )
+            }
             Spacer(modifier = Modifier.height(20.dp))
             if (document.isNotEmpty()) {
                 val filteredDiary = document.filter { it.created_at == clickedDate.toString()&&
@@ -303,16 +329,34 @@ class MainFragment : Fragment() {
     fun MainDateBar(yearmonth : YearMonth) {
         Row (modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically){
-            Image(painter = painterResource(id = R.drawable.dotted_line),
-                contentDescription = null,
-                modifier = Modifier.weight(0.6f))
+            Canvas(
+                modifier = Modifier
+                    .fillMaxWidth(0.6f)
+                    .padding(bottom = 20.dp, top = 20.dp)
+            ) {
+                drawLine(
+                    color = Color.Gray,
+                    start = Offset(0f, 0f),
+                    end = Offset(size.width, 0f),
+                    strokeWidth = 3f
+                )
+            }
             Text(text = yearmonth.toString().replace('-', '.'),
                 fontFamily = FontFamily(Font(R.font.npsfont_regula)),
                 fontSize = 15.sp,
             )
-            Image(painter = painterResource(id = R.drawable.dotted_line),
-                contentDescription = null,
-                modifier = Modifier.weight(0.2f))
+            Canvas(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 20.dp, top = 20.dp)
+            ) {
+                drawLine(
+                    color = Color.Gray,
+                    start = Offset(0f, 0f),
+                    end = Offset(size.width, 0f),
+                    strokeWidth = 3f
+                )
+            }
         }
 
         Spacer(modifier = Modifier.height(10.dp))
