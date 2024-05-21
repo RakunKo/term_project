@@ -8,6 +8,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import com.example.term_project.R
 import com.example.term_project.databinding.ActivityLoginBinding
 import com.google.firebase.auth.FirebaseAuth
 import java.util.regex.Pattern
@@ -18,13 +19,12 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setTheme(R.style.Base_Theme_Term_project)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         auth = FirebaseAuth.getInstance()
         setContentView(binding.root)
 
         clickListener()
-
-
     }
 
     private fun clickListener() {

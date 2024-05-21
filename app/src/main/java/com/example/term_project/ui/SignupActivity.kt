@@ -68,9 +68,6 @@ class SignupActivity : AppCompatActivity() {
                     binding.signupErrorTv.text = "이메일을 확인해주세요"
                 }
             }
-
-
-
         }
     }
     private fun createUser(user:SignupInfo) {
@@ -108,7 +105,6 @@ class SignupActivity : AppCompatActivity() {
                 }
         }
     }
-
     private fun inputDaflautNote(note: Note?, user:UserInfo?) {
         note?.let {
             FirebaseFirestore.getInstance()

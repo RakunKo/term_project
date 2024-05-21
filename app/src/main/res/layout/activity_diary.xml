@@ -5,9 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.MainActivity"
+<<<<<<< HEAD
+    android:background="@color/white">
+=======
     android:background="@color/white"
     android:paddingHorizontal="20dp">
 
+>>>>>>> b4ab83694ddbfc3dbbbcc25b44ebc52566e15274
     <!-- 맨 상단 -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/diary_bar"
@@ -16,11 +20,7 @@
         android:layout_marginTop="30dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        >
-
-
-
+        app:layout_constraintEnd_toEndOf="parent">
         <ImageView
             android:id="@+id/diary_back_btn"
             android:layout_width="20dp"
@@ -150,7 +150,6 @@
                     app:layout_constraintStart_toEndOf="@id/diary_gpt_ic"
                     android:layout_marginStart="10dp"
                     app:layout_constraintBottom_toBottomOf="@+id/diary_gpt_ic"/>
-
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <TextView
@@ -160,14 +159,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginTop="15dp"/>
-
-
-
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>
