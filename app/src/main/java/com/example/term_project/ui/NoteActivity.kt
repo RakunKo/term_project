@@ -229,7 +229,22 @@ class NoteActivity: AppCompatActivity()  {
                                     onTextFieldValueChange(TextFieldValue(""))
                                 }
                             }else {     //삭제하는 코드
-
+                                FirebaseFirestore
+                                    .getInstance()
+                                    .collection("note")
+                                    .document(note.uid + note.id)
+                                    .delete()
+                                    .addOnSuccessListener {
+                                        Log.d("정보삭제", "성공")
+                                        mainViewModel.getAllNote(uid)
+                                        coroutineScope.launch {
+                                            state.hide()
+                                            onTextFieldValueChange(TextFieldValue(""))
+                                        }
+                                    }
+                                    .addOnFailureListener {
+                                        Log.d("정보", "실패")
+                                    }
                             }
                         }),
                     contentAlignment = Alignment.Center
