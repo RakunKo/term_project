@@ -37,6 +37,7 @@ class PostDiaryActivity : AppCompatActivity() {
 
         date = intent.getStringExtra("date")!!
         note = intent.getIntExtra("note", 1)
+        Log.d("note", note.toString())
 
         binding.ppostDiaryDateTv.text = date
         binding.postDiaryEt.setText(intent.getStringExtra("content"))
@@ -80,15 +81,17 @@ class PostDiaryActivity : AppCompatActivity() {
 
     private fun inputDiary1(diary: Diary?) {
         val db = FirebaseFirestore.getInstance()
-        val documentRef = db.collection("diary").document(diary!!.uid + note + diary.created_at)
+        val documentRef = db.collection("diary").document(diary!!.uid + diary.note.toString() + diary.created_at)
+        Log.d("exist", documentRef.toString())
 
 
         documentRef.get().addOnSuccessListener { document ->
-            if (document != null && document.exists()) {
+            if (document.exists()) {
                 // 문서가 존재함
                 val newData = hashMapOf(
                     "content" to diary.content,
                 )
+                Log.d("note1", diary!!.uid +  diary.note.toString() + diary.created_at)
 
                 documentRef.set(newData, SetOptions.merge())
                     .addOnSuccessListener {
@@ -99,10 +102,11 @@ class PostDiaryActivity : AppCompatActivity() {
                         customToast.createToast(this, "일기 작성 실패", 300, false)
                     }
             } else {
+                Log.d("note2", diary!!.uid +  diary.note.toString() + diary.created_at)
                 // 존재하지 않는 경우, 새로운 문서를 생성합니다.
                 FirebaseFirestore.getInstance()
                     .collection("diary")
-                    .document(diary.uid + diary.created_at)
+                    .document(diary.uid + diary.note.toString() + diary.created_at)
                     .set(diary)
                     .addOnSuccessListener {
                         customToast.createToast(this, "일기 작성 완료", 300, true)
